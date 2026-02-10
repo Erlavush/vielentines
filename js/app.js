@@ -1,0 +1,481 @@
+/* ============================================================
+   VIELENTINES — Valentine Proposal Website Logic
+   ============================================================ */
+
+// ==================== CONFIGURATION ====================
+const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';       // Replace with your EmailJS public key
+const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';       // Replace with your EmailJS service ID
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';     // Replace with your EmailJS template ID
+
+// Valentine's Day target: Feb 14, 2026, 00:00:00 PHT (UTC+8)
+const VALENTINES_DAY = new Date('2026-02-14T00:00:00+08:00');
+
+// ==================== STATE ====================
+let currentPage = 0; // index of current visible page
+let touchStartX = 0;
+let touchEndX = 0;
+let isAnimating = false;
+let emailSent = false;
+
+// Pages that support swipe-right navigation
+// page indexes: 0=P1, 1=P2, 2=P3, 3=P4, 4-8=P5.1-5.5, 9=P6, 10=P7
+const SWIPEABLE_PAGES = [0, 1]; // only pages 1 and 2 support swipe
+const TOTAL_PAGES = 11;
+
+// ==================== NARRATION DATA (Page 1) ====================
+const narrationLines = [
+    {
+        text: 'Hi vieeee sweetiee ;>',
+        sticker: 'GIFs/hehe.gif'
+    },
+    {
+        text: "I'm sorry it takes me so long to ask you this...",
+        sticker: 'GIFs/sorry.gif'
+    },
+    {
+        text: "I just want you to know that I've been spending a lot of time figuring out how to really ask you :<",
+        sticker: 'GIFs/please.gif'
+    },
+    {
+        text: 'Which is why I made this for you ><',
+        sticker: 'GIFs/hehe.gif'
+    },
+    {
+        text: "All I wanted to say is that... You are the most prettiest, most elegant, most lovely, sweetest, most beautiful, most gorgeous, most wonderful, most charming, most dazzling, most radiant girl in the entire universe 💖",
+        sticker: 'GIFs/hehe.gif'  // placeholder for Vie's photo
+    },
+    {
+        text: 'Which is why this is for you...',
+        sticker: 'GIFs/please.gif'
+    }
+];
+
+// ==================== TERMINAL DATA (Page 6) ====================
+const terminalLines = [
+    { text: '> Initializing vie protocol...', delay: 600 },
+    { text: '> Loading feelings.dll... ████████████ 100%', delay: 1800 },
+    { text: '> Scanning for soulmate... FOUND ✓', delay: 800 },
+    { text: '> Establishing connection... ██████████ 100%', delay: 1800 },
+    { text: '', delay: 300 },
+    { text: '✅ SUCCESS: Connection established.', delay: 800 },
+    { text: '', delay: 300 },
+    { text: '❤️ Heart_Rate: ████████████████████ RISING ↑↑↑', delay: 800, heartRate: true },
+    { text: '', delay: 300 },
+    { text: '📊 Status: earli is now the luckiest, happiest', delay: 600 },
+    { text: '          guy in the world ;>', delay: 400 },
+    { text: '', delay: 300 },
+    { text: '> HUAHUAHAUHAUHAUAH < 3', delay: 600 }
+];
+
+// ==================== INITIALIZATION ====================
+document.addEventListener('DOMContentLoaded', () => {
+    createFloatingHearts();
+    setupSwipe();
+    startNarration();
+    startCountdown();
+});
+
+// ==================== FLOATING HEARTS ====================
+function createFloatingHearts() {
+    const container = document.getElementById('floatingHearts');
+    const hearts = ['♥', '♡', '💕', '💗', '❤'];
+    for (let i = 0; i < 15; i++) {
+        const heart = document.createElement('span');
+        heart.className = 'floating-heart';
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = (12 + Math.random() * 20) + 'px';
+        heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+        heart.style.animationDelay = (Math.random() * 10) + 's';
+        container.appendChild(heart);
+    }
+}
+
+// ==================== SWIPE NAVIGATION ====================
+function setupSwipe() {
+    const wrapper = document.getElementById('pagesWrapper');
+
+    wrapper.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    wrapper.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    // Desktop: arrow key support
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' && SWIPEABLE_PAGES.includes(currentPage)) {
+            navigateToPage(currentPage + 1);
+        }
+    });
+}
+
+function handleSwipe() {
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) < 50) return; // too small
+
+    if (diff > 0 && SWIPEABLE_PAGES.includes(currentPage)) {
+        // Swiped left → go right
+        navigateToPage(currentPage + 1);
+    }
+}
+
+function navigateToPage(pageIndex) {
+    if (pageIndex < 0 || pageIndex >= TOTAL_PAGES || isAnimating) return;
+    isAnimating = true;
+    currentPage = pageIndex;
+
+    const wrapper = document.getElementById('pagesWrapper');
+    wrapper.style.transform = `translateX(-${pageIndex * 100}vw)`;
+
+    setTimeout(() => {
+        isAnimating = false;
+        onPageEnter(pageIndex);
+    }, 650);
+}
+
+function onPageEnter(pageIndex) {
+    switch (pageIndex) {
+        case 1: // Flower animation
+            triggerFlowerAnimation();
+            break;
+        case 3: // Letter
+            showLetter();
+            break;
+        case 9: // Celebration
+            startTerminalAnimation();
+            break;
+    }
+}
+
+// ==================== PAGE 1: TYPEWRITER ====================
+let narrationIndex = 0;
+let charIndex = 0;
+let narrationTimer = null;
+
+function startNarration() {
+    narrationIndex = 0;
+    charIndex = 0;
+    typeNextLine();
+}
+
+function typeNextLine() {
+    if (narrationIndex >= narrationLines.length) {
+        // All lines done — show swipe prompt
+        document.getElementById('swipePrompt1').classList.remove('hidden');
+        return;
+    }
+
+    const line = narrationLines[narrationIndex];
+    charIndex = 0;
+
+    // Clear cursor from previous line
+    const textEl = document.getElementById('narrationText');
+
+    // Add line break if not first line
+    if (narrationIndex > 0) {
+        textEl.innerHTML += '<br><br>';
+    }
+
+    // Start typing
+    typeChar(line);
+}
+
+function typeChar(line) {
+    const textEl = document.getElementById('narrationText');
+
+    if (charIndex < line.text.length) {
+        // Remove old cursor
+        const oldCursor = textEl.querySelector('.cursor');
+        if (oldCursor) oldCursor.remove();
+
+        // Add character
+        textEl.innerHTML += line.text[charIndex];
+
+        // Add cursor
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor';
+        textEl.appendChild(cursor);
+
+        charIndex++;
+        narrationTimer = setTimeout(() => typeChar(line), 40);
+    } else {
+        // Line done — remove cursor, show sticker
+        const oldCursor = textEl.querySelector('.cursor');
+        if (oldCursor) oldCursor.remove();
+
+        showNarrationSticker(line.sticker);
+
+        // After sticker shows, move to next line
+        narrationIndex++;
+        setTimeout(() => {
+            typeNextLine();
+        }, 2000);
+    }
+}
+
+function showNarrationSticker(src) {
+    const stickerContainer = document.getElementById('narrationSticker');
+    const stickerImg = document.getElementById('narrationStickerImg');
+    stickerImg.src = src;
+    stickerContainer.classList.add('visible');
+
+    // Hide sticker after a delay so next one can appear
+    setTimeout(() => {
+        if (narrationIndex < narrationLines.length) {
+            stickerContainer.classList.remove('visible');
+        }
+    }, 1800);
+}
+
+// ==================== PAGE 2: FLOWER ANIMATION ====================
+let flowerTriggered = false;
+
+function triggerFlowerAnimation() {
+    if (flowerTriggered) return;
+    flowerTriggered = true;
+
+    const container = document.getElementById('flowerContainer');
+    setTimeout(() => {
+        container.classList.remove('not-loaded');
+    }, 500);
+
+    // Show swipe prompt after animation
+    setTimeout(() => {
+        document.getElementById('swipePrompt2').classList.remove('hidden');
+    }, 6000);
+}
+
+// ==================== PAGE 3: ENVELOPE ====================
+document.addEventListener('DOMContentLoaded', () => {
+    const envelope = document.getElementById('envelope');
+    envelope.addEventListener('click', () => {
+        envelope.classList.add('opened');
+        setTimeout(() => {
+            navigateToPage(3);
+        }, 900);
+    });
+});
+
+// ==================== PAGE 4: LETTER ====================
+function showLetter() {
+    const paper = document.getElementById('letterPaper');
+    setTimeout(() => {
+        paper.classList.add('visible');
+    }, 200);
+}
+
+// ==================== NAVIGATION HELPERS ====================
+function goToYes() {
+    navigateToPage(9); // Page 6 = index 9
+}
+
+function goToNo(nextSubPage) {
+    // nextSubPage: 1-5 → page indexes 4-8
+    const pageIndex = 3 + nextSubPage; // 5.1=4, 5.2=5, 5.3=6, 5.4=7, 5.5=8
+    navigateToPage(pageIndex);
+}
+
+// ==================== PAGE 5.5: SWAP TRICK ====================
+function handleSwapNo() {
+    const buttonsContainer = document.getElementById('swapButtons');
+    const yesBtn = document.getElementById('swapYes');
+    const noBtn = document.getElementById('swapNo');
+
+    // Step 1: Swap button positions (YES goes to right, NO goes to left)
+    buttonsContainer.style.flexDirection = 'row-reverse';
+
+    // Step 2: After a tiny delay, make YES look "pressed" and navigate
+    setTimeout(() => {
+        yesBtn.classList.add('btn-pressed');
+        setTimeout(() => {
+            goToYes();
+        }, 300);
+    }, 150);
+}
+
+// ==================== PAGE 6: TERMINAL ANIMATION ====================
+let terminalStarted = false;
+
+function startTerminalAnimation() {
+    if (terminalStarted) return;
+    terminalStarted = true;
+
+    const body = document.getElementById('terminalBody');
+    body.innerHTML = '';
+
+    let lineIndex = 0;
+    let totalDelay = 0;
+
+    terminalLines.forEach((line, i) => {
+        totalDelay += line.delay;
+        const delay = totalDelay;
+
+        setTimeout(() => {
+            const div = document.createElement('div');
+            div.className = 'term-line';
+
+            if (line.heartRate) {
+                div.innerHTML = line.text.replace(
+                    '████████████████████',
+                    '<span class="heart-rate">████████████████████</span>'
+                );
+            } else {
+                div.textContent = line.text;
+            }
+
+            body.appendChild(div);
+            body.scrollTop = body.scrollHeight;
+        }, delay);
+    });
+
+    // After all lines, show stickers + confetti + send email
+    const finalDelay = totalDelay + 1000;
+    setTimeout(() => {
+        document.getElementById('celebrationStickers').classList.remove('hidden');
+        launchConfetti();
+        sendEmails();
+
+        // Show swipe prompt to go to page 7
+        setTimeout(() => {
+            document.getElementById('swipePrompt6').classList.remove('hidden');
+            // Enable swiping on page 6 to page 7
+            SWIPEABLE_PAGES.push(9);
+        }, 2000);
+    }, finalDelay);
+}
+
+// ==================== CONFETTI ====================
+function launchConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const colors = ['#ff6b9d', '#e91e63', '#ff1744', '#ffd700', '#ff9800', '#f06292', '#ba68c8', '#fff'];
+
+    for (let i = 0; i < 150; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            w: 4 + Math.random() * 6,
+            h: 8 + Math.random() * 6,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            vx: (Math.random() - 0.5) * 4,
+            vy: 2 + Math.random() * 4,
+            rotation: Math.random() * 360,
+            rotSpeed: (Math.random() - 0.5) * 10,
+            opacity: 1
+        });
+    }
+
+    let frame = 0;
+    const maxFrames = 300;
+
+    function animate() {
+        if (frame >= maxFrames) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            return;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const fadeStart = maxFrames * 0.7;
+
+        particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.05; // gravity
+            p.rotation += p.rotSpeed;
+
+            if (frame > fadeStart) {
+                p.opacity = Math.max(0, 1 - (frame - fadeStart) / (maxFrames - fadeStart));
+            }
+
+            ctx.save();
+            ctx.globalAlpha = p.opacity;
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+        });
+
+        frame++;
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+}
+
+// ==================== EMAIL ====================
+function sendEmails() {
+    if (emailSent) return;
+    emailSent = true;
+
+    // Skip if EmailJS not configured
+    if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+        console.log('EmailJS not configured — skipping email send.');
+        console.log('To enable emails, set EMAILJS_PUBLIC_KEY, EMAILJS_SERVICE_ID, and EMAILJS_TEMPLATE_ID in app.js');
+        return;
+    }
+
+    try {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        const timestamp = new Date().toLocaleString();
+
+        // Email to Erlavush
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            to_email: 'ejbdelgado01322@usep.edu.ph',
+            to_name: 'Earli',
+            from_name: 'Vielentines App',
+            message: `Vie just accepted your Vielentines proposal! 🎉 She clicked YES at ${timestamp}. You're officially the luckiest guy!`
+        }).then(() => {
+            console.log('Email sent to Earli ✓');
+        }).catch(err => console.error('Email error (Earli):', err));
+
+        // Email to Vie
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            to_email: 'empmara01202400407@usep.edu.ph',
+            to_name: 'Vie',
+            from_name: 'Vielentines App',
+            message: `Hi Vie! 💖 You just said YES to being Earli's Vielentines! Thank you for making him the happiest person alive. Happy Valentine's Day! 🌹`
+        }).then(() => {
+            console.log('Email sent to Vie ✓');
+        }).catch(err => console.error('Email error (Vie):', err));
+    } catch (e) {
+        console.error('EmailJS initialization error:', e);
+    }
+}
+
+// ==================== COUNTDOWN (Page 7) ====================
+function startCountdown() {
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
+
+function updateCountdown() {
+    const now = new Date();
+    const diff = VALENTINES_DAY - now;
+
+    if (diff <= 0) {
+        // Valentine's Day has arrived or passed!
+        document.getElementById('countDays').textContent = '🎉';
+        document.getElementById('countHours').textContent = '💖';
+        document.getElementById('countMinutes').textContent = '🎉';
+        document.getElementById('countSeconds').textContent = '💖';
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('countDays').textContent = String(days).padStart(2, '0');
+    document.getElementById('countHours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('countMinutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('countSeconds').textContent = String(seconds).padStart(2, '0');
+}

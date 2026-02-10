@@ -1,0 +1,728 @@
+/* ============================================================
+   VIELENTINES — Valentine Proposal Website Styles
+   ============================================================ */
+
+/* ---------- RESET & BASE ---------- */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #f5d5e0;
+  --bg-secondary: #e8b4cb;
+  --bg-page: linear-gradient(135deg, #f6c5d8 0%, #d4a0c0 50%, #c48bb8 100%);
+  --pink-light: #ff6b9d;
+  --pink-main: #e91e63;
+  --pink-dark: #ad1457;
+  --rose: #ff1744;
+  --gold: #ffd700;
+  --white: #fff5f8;
+  --white-pure: #ffffff;
+  --gray: #9e9e9e;
+  --gray-dark: #616161;
+  --terminal-bg: #1a1a2e;
+  --terminal-green: #00ff41;
+  --terminal-border: #16213e;
+
+  --font-body: "Poppins", sans-serif;
+  --font-script: "Dancing Script", cursive;
+  --font-mono: "Fira Code", monospace;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-body);
+  background: #1a0011;
+}
+
+/* ---------- PAGE SYSTEM ---------- */
+.pages-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.page {
+  min-width: 100vw;
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- FLOATING HEARTS BACKGROUND ---------- */
+.floating-hearts {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-heart {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0.15;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.15;
+  }
+  90% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   PAGE 1 — TYPEWRITER NARRATION
+   ============================================================ */
+.page-1 {
+  background: var(--bg-page);
+}
+
+.narration-page {
+  justify-content: flex-start;
+  padding-top: 15vh;
+}
+
+.narration-text {
+  font-family: var(--font-body);
+  color: var(--white-pure);
+  font-size: 1.15rem;
+  font-weight: 400;
+  text-align: center;
+  line-height: 1.6;
+  max-width: 85%;
+  min-height: 120px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.narration-text .cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background: var(--white-pure);
+  margin-left: 2px;
+  animation: blink 0.7s infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.narration-sticker {
+  position: absolute;
+  bottom: 12vh;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.narration-sticker.visible {
+  opacity: 1;
+}
+
+.narration-sticker img {
+  max-width: 180px;
+  max-height: 180px;
+  object-fit: contain;
+}
+
+/* ---------- SWIPE PROMPT ---------- */
+.swipe-prompt {
+  position: absolute;
+  bottom: 4vh;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--white-pure);
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0.8;
+  animation: bounceRight 1.5s ease-in-out infinite;
+  z-index: 10;
+}
+
+.swipe-prompt.hidden {
+  display: none;
+}
+
+@keyframes bounceRight {
+  0%,
+  100% {
+    transform: translateX(-50%);
+  }
+  50% {
+    transform: translateX(-40%);
+  }
+}
+
+/* ============================================================
+   PAGE 2 — FLOWER ANIMATION
+   ============================================================ */
+.page-2 {
+  background: #000;
+}
+
+.flower-page {
+  position: relative;
+}
+
+.flower-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  perspective: 1000px;
+}
+
+/* Override flower animation body styles to work inside our container */
+.flower-container .night {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+}
+
+.flower-container .flowers {
+  position: relative;
+  transform: scale(0.9);
+}
+
+/* Hide flower elements when "not-loaded" */
+.flower-container.not-loaded .flowers {
+  opacity: 0;
+}
+
+.flower-container .flowers {
+  transition: opacity 0.5s ease;
+  opacity: 1;
+}
+
+.page-2 .swipe-prompt {
+  color: #f0f0f0;
+}
+
+/* ============================================================
+   PAGE 3 — ENVELOPE
+   ============================================================ */
+.page-3 {
+  background: var(--bg-page);
+}
+
+.envelope-page {
+  gap: 30px;
+}
+
+.envelope-text {
+  font-family: var(--font-body);
+  color: var(--white-pure);
+  font-size: 1.3rem;
+  font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.envelope-wrapper {
+  perspective: 800px;
+  cursor: pointer;
+}
+
+.envelope {
+  position: relative;
+  width: 220px;
+  height: 150px;
+  animation: envelopeFloat 3s ease-in-out infinite;
+}
+
+@keyframes envelopeFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.envelope-body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #fff5f0 0%, #ffe0d0 100%);
+  border-radius: 4px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.envelope-heart {
+  font-size: 3rem;
+  color: var(--pink-main);
+  animation: heartPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes heartPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 75px;
+  background: linear-gradient(135deg, #ffe8dd 0%, #ffd4c4 100%);
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  transform-origin: top center;
+  transition: transform 0.8s ease;
+  z-index: 2;
+}
+
+.envelope.opened .envelope-flap {
+  transform: rotateX(180deg);
+}
+
+.envelope-cta {
+  color: var(--white-pure);
+  font-size: 0.95rem;
+  font-weight: 400;
+  opacity: 0.7;
+  animation: bounceRight 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   PAGE 4 — THE LETTER (PROPOSAL)
+   ============================================================ */
+.page-4 {
+  background: var(--bg-page);
+}
+
+.letter-page {
+  gap: 0;
+}
+
+.letter-paper {
+  background: linear-gradient(180deg, #fffbf5 0%, #fff5ee 100%);
+  border-radius: 12px;
+  padding: 40px 30px;
+  max-width: 340px;
+  width: 90%;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.2),
+    inset 0 0 30px rgba(255, 220, 200, 0.3);
+  text-align: center;
+  transform: translateY(60px);
+  opacity: 0;
+  transition:
+    transform 0.8s ease,
+    opacity 0.8s ease;
+}
+
+.letter-paper.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.letter-question {
+  font-family: var(--font-script);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 35px;
+  line-height: 1.4;
+}
+
+.letter-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px 36px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-yes {
+  background: var(--pink-main);
+  color: var(--white-pure);
+}
+
+.btn-yes:hover {
+  background: var(--pink-dark);
+}
+
+.btn-no {
+  background: var(--gray);
+  color: var(--white-pure);
+}
+
+.btn-no:hover {
+  background: var(--gray-dark);
+}
+
+/* ============================================================
+   PAGE 5 — "NO" GAUNTLET
+   ============================================================ */
+.page-5 {
+  background: var(--bg-page);
+}
+
+.no-page {
+  gap: 25px;
+}
+
+.no-message {
+  font-family: var(--font-body);
+  color: var(--white-pure);
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.no-sticker {
+  max-width: 180px;
+  max-height: 180px;
+  object-fit: contain;
+}
+
+/* Swap trick button press animation */
+.btn.btn-pressed {
+  transform: scale(0.9) !important;
+  background: var(--pink-dark) !important;
+  color: var(--white-pure) !important;
+  transition: all 0.1s ease;
+}
+
+/* ============================================================
+   PAGE 6 — CONSOLE CELEBRATION
+   ============================================================ */
+.page-6 {
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+.celebration-page {
+  gap: 20px;
+  padding: 20px;
+}
+
+.terminal {
+  width: 95%;
+  max-width: 500px;
+  background: var(--terminal-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(0, 255, 65, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terminal-header {
+  background: var(--terminal-border);
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.terminal-dot.red {
+  background: #ff5f57;
+}
+.terminal-dot.yellow {
+  background: #febc2e;
+}
+.terminal-dot.green {
+  background: #28c840;
+}
+
+.terminal-title {
+  margin-left: 10px;
+  color: #aaa;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.terminal-body {
+  padding: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--terminal-green);
+  line-height: 1.8;
+  min-height: 280px;
+}
+
+.terminal-body .term-line {
+  opacity: 0;
+  animation: termFadeIn 0.3s ease forwards;
+}
+
+@keyframes termFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.terminal-body .term-line .loading-bar {
+  display: inline-block;
+  width: 0;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.terminal-body .term-line .loading-bar.animating {
+  animation: loadBar 1.5s ease forwards;
+}
+
+@keyframes loadBar {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.terminal-body .heart-rate {
+  display: inline-block;
+  animation: heartRatePulse 1s ease-in-out infinite;
+}
+
+@keyframes heartRatePulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.celebration-stickers {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.celebration-stickers.hidden {
+  display: none;
+}
+
+.celebration-gif {
+  max-width: 120px;
+  max-height: 120px;
+  object-fit: contain;
+}
+
+/* Confetti canvas */
+#confettiCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ============================================================
+   PAGE 7 — CUSTOM MESSAGE + COUNTDOWN
+   ============================================================ */
+.page-7 {
+  background: var(--bg-page);
+}
+
+.message-page {
+  gap: 30px;
+  padding: 30px 20px;
+}
+
+.final-message-card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px 25px;
+  max-width: 380px;
+  width: 90%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.final-message {
+  font-family: var(--font-body);
+  color: var(--white-pure);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.countdown-section {
+  text-align: center;
+}
+
+.countdown-title {
+  font-family: var(--font-body);
+  color: var(--white-pure);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.countdown-timer {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.countdown-unit {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 14px;
+  padding: 12px 14px;
+  min-width: 65px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.countdown-number {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--white-pure);
+}
+
+.countdown-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.closing-text {
+  font-family: var(--font-body);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 400px) {
+  .narration-text {
+    font-size: 1rem;
+  }
+  .letter-question {
+    font-size: 1.5rem;
+  }
+  .terminal-body {
+    font-size: 0.7rem;
+    padding: 12px;
+  }
+  .btn {
+    padding: 10px 28px;
+    font-size: 0.9rem;
+  }
+  .envelope {
+    width: 180px;
+    height: 130px;
+  }
+  .countdown-unit {
+    min-width: 55px;
+    padding: 10px;
+  }
+  .countdown-number {
+    font-size: 1.3rem;
+  }
+}
