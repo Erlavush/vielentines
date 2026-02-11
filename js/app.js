@@ -3,9 +3,9 @@
    ============================================================ */
 
 // ==================== CONFIGURATION ====================
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';       // Replace with your EmailJS public key
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';       // Replace with your EmailJS service ID
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';     // Replace with your EmailJS template ID
+const EMAILJS_PUBLIC_KEY = '0pFx3Nxbph5tM-IT7';
+const EMAILJS_SERVICE_ID = 'service_0d74fjg';
+const EMAILJS_TEMPLATE_ID = 'template_wrvd2yh';
 
 // Valentine's Day target: Feb 14, 2026, 00:00:00 PHT (UTC+8)
 const VALENTINES_DAY = new Date('2026-02-14T00:00:00+08:00');
@@ -26,27 +26,27 @@ const TOTAL_PAGES = 11;
 const narrationLines = [
     {
         text: 'Hi vieeee sweetiee ;>',
-        sticker: 'GIFs/hehe.gif'
+        sticker: 'GIFs/sticker-1.gif'
     },
     {
-        text: "I'm sorry it takes me so long to ask you this...",
-        sticker: 'GIFs/sorry.gif'
+        text: "I'm sorry it takes me so long to ask you thisss...",
+        sticker: 'GIFs/sticker-2.gif'
     },
     {
         text: "I just want you to know that I've been spending a lot of time figuring out how to really ask you :<",
-        sticker: 'GIFs/please.gif'
+        sticker: 'GIFs/sticker-3.gif'
     },
     {
         text: 'Which is why I made this for you ><',
-        sticker: 'GIFs/hehe.gif'
+        sticker: 'GIFs/sticker-4.gif'
     },
     {
         text: "All I wanted to say is that... You are the most prettiest, most elegant, most lovely, sweetest, most beautiful, most gorgeous, most wonderful, most charming, most dazzling, most radiant girl in the entire universe 💖",
-        sticker: 'GIFs/hehe.gif'  // placeholder for Vie's photo
+        sticker: 'GIFs/sticker-5.gif' 
     },
     {
-        text: 'Which is why this is for you...',
-        sticker: 'GIFs/please.gif'
+        text: 'Also I have a present for you, vieee...',
+        sticker: 'GIFs/sticker-6.gif'
     }
 ];
 
@@ -64,7 +64,7 @@ const terminalLines = [
     { text: '📊 Status: earli is now the luckiest, happiest', delay: 600 },
     { text: '          guy in the world ;>', delay: 400 },
     { text: '', delay: 300 },
-    { text: '> HUAHUAHAUHAUHAUAH < 3', delay: 600 }
+    { text: '> NYAHAHAHUAHUAHAUHAUHAUAH < 3', delay: 600 }
 ];
 
 // ==================== INITIALIZATION ====================
@@ -229,7 +229,7 @@ function typeChar(line) {
         textEl.appendChild(cursor);
 
         charIndex++;
-        narrationTimer = setTimeout(() => typeChar(line), 80);
+        narrationTimer = setTimeout(() => typeChar(line), 60);
     } else {
         // Line done — remove cursor
         const oldCursor = textEl.querySelector('.cursor');
@@ -262,10 +262,10 @@ function triggerFlowerAnimation() {
         container.classList.remove('not-loaded');
     }, 500);
 
-    // Show swipe prompt after animation
+    // Show prompt after flower animation finishes
     setTimeout(() => {
         document.getElementById('swipePrompt2').classList.remove('hidden');
-    }, 6000);
+    }, 8000);
 }
 
 // ==================== PAGE 3: ENVELOPE ====================
@@ -303,17 +303,49 @@ function handleSwapNo() {
     const buttonsContainer = document.getElementById('swapButtons');
     const yesBtn = document.getElementById('swapYes');
     const noBtn = document.getElementById('swapNo');
+    const page = document.getElementById('page5_5');
 
-    // Step 1: Swap button positions (YES goes to right, NO goes to left)
+    // Step 1: Swap button positions instantly
     buttonsContainer.style.flexDirection = 'row-reverse';
 
-    // Step 2: After a tiny delay, make YES look "pressed" and navigate
+    // Step 2: After a beat, hide NEVERR and start zooming into FINEE
     setTimeout(() => {
-        yesBtn.classList.add('btn-pressed');
+        noBtn.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        noBtn.style.opacity = '0';
+        noBtn.style.transform = 'scale(0.5)';
+        noBtn.style.pointerEvents = 'none';
+
+        // Step 3: Zoom the entire page, centering FINEE on screen
         setTimeout(() => {
-            goToYes();
-        }, 300);
-    }, 150);
+            const btnRect = yesBtn.getBoundingClientRect();
+            const btnCenterX = btnRect.left + btnRect.width / 2;
+            const btnCenterY = btnRect.top + btnRect.height / 2;
+            const viewCenterX = window.innerWidth / 2;
+            const viewCenterY = window.innerHeight / 2;
+            const offsetX = viewCenterX - btnCenterX;
+            const offsetY = viewCenterY - btnCenterY;
+
+            page.style.transition = 'transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            page.style.transformOrigin = `${btnCenterX}px ${btnCenterY}px`;
+            page.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(5)`;
+
+            // Step 4: Press the FINEE button visually
+            yesBtn.classList.add('btn-pressed');
+            yesBtn.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+            yesBtn.style.transform = 'scale(1.15)';
+            yesBtn.style.boxShadow = '0 0 30px rgba(255,255,255,0.6)';
+
+            // Step 5: Navigate to celebration after zoom completes
+            setTimeout(() => {
+                goToYes();
+                // Reset the zoom after navigation
+                setTimeout(() => {
+                    page.style.transition = 'none';
+                    page.style.transform = 'none';
+                }, 900);
+            }, 1400);
+        }, 500);
+    }, 300);
 }
 
 // ==================== PAGE 6: TERMINAL ANIMATION ====================
@@ -435,33 +467,28 @@ function sendEmails() {
     if (emailSent) return;
     emailSent = true;
 
-    // Skip if EmailJS not configured
-    if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
-        console.log('EmailJS not configured — skipping email send.');
-        console.log('To enable emails, set EMAILJS_PUBLIC_KEY, EMAILJS_SERVICE_ID, and EMAILJS_TEMPLATE_ID in app.js');
-        return;
-    }
-
     try {
-        emailjs.init(EMAILJS_PUBLIC_KEY);
+        emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
         const timestamp = new Date().toLocaleString();
 
         // Email to Erlavush
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-            to_email: 'ejbdelgado01322@usep.edu.ph',
+            email: 'ejbdelgado01322@usep.edu.ph',
             to_name: 'Earli',
-            from_name: 'Vielentines App',
-            message: `Vie just accepted your Vielentines proposal! 🎉 She clicked YES at ${timestamp}. You're officially the luckiest guy!`
+            name: 'Earli',
+            from_name: 'Earl',
+            message: `BROO SHE SAID YES!! 🎉🎉 Vie clicked YES at ${timestamp}. ur literally the luckiest guy alive rn no cap. go celebrate or smth idk 😭💙`
         }).then(() => {
             console.log('Email sent to Earli ✓');
         }).catch(err => console.error('Email error (Earli):', err));
 
         // Email to Vie
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-            to_email: 'empmara01202400407@usep.edu.ph',
-            to_name: 'Vie',
-            from_name: 'Vielentines App',
-            message: `Hi Vie! 💖 You just said YES to being Earli's Vielentines! Thank you for making him the happiest person alive. Happy Valentine's Day! 🌹`
+            email: 'empmara01202400407@usep.edu.ph',
+            to_name: 'Viee',
+            name: 'Viee',
+            from_name: 'Earl',
+            message: `sooo u just said YES hehe 😭💙 NAYAHAHHAHAHAHA anyway vavieeeee, happy valentines againnnn NAYDAWHDAUWHDXUAHWXDAWXDAWXDAWXD maulaw nq jk NAYAYYA mwaaaaa see u if ever u free sa 14 mwaaaa mwaa mwaa💙`
         }).then(() => {
             console.log('Email sent to Vie ✓');
         }).catch(err => console.error('Email error (Vie):', err));

@@ -222,13 +222,22 @@ Triggered when Page 6 loads (she said YES).
 
 ---
 
-## 🎨 Design & Aesthetics
+## 4. Design Aesthetics
 
-- **Primary palette:** Soft pink/lavender background (like the sketch — light purple/pink)
-- **Font:** Google Fonts — clean sans-serif for body, handwriting for proposal
-- **Mobile-first** — designed for phone viewing
-- **Swipe navigation** via touch events
-- **No heavy animations on buttons or stickers** — keep it simple and clean
+- **Theme:** **"Blue & Dreamy"** (Changed from Pink/Red)
+  - **Primary Colors:** Soft Blues (`#c5daf6`), White, and Deep Blue accents.
+  - **Vibe:** Cloud-like, dreamy, sincere, and calming.
+- **Typography:**
+  - _Headings/Fun Text:_ **"Freckle Face"** (Playful, handwritten feel).
+  - _Body/Buttons:_ **"Poppins"** (Clean, modern).
+  - _Terminal:_ **"Fira Code"** (Monospace for the "hacker" page).
+  - _Script:_ **"Dancing Script"** (For romantic accents).
+- **Animations:**
+  - Smooth **fade transitions** between pages (replacing slide effects).
+  - Floating hearts (customized to blue/white).
+  - Typewriter effects for narration.
+  - "No" button evasion (The "Swap Trick").
+- **Music:** Background music (optional/user-controlled).
 
 ---
 

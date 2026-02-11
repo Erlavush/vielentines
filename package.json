@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A heartfelt Valentine's Day proposal website for Vie",
   "scripts": {
-    "dev": "http-server . -p 8080 -o"
+    "dev": "http-server . -p 8080 -o -c-1"
   },
   "keywords": [
     "valentine",
