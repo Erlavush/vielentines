@@ -95,6 +95,8 @@ function createFloatingHearts() {
 function setupSwipe() {
     const wrapper = document.getElementById('pagesWrapper');
 
+    // Touch events disabled per user request
+    /*
     wrapper.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
@@ -103,6 +105,7 @@ function setupSwipe() {
         touchEndX = e.changedTouches[0].screenX;
         handleSwipe();
     }, { passive: true });
+    */
 
     // Desktop: arrow key support
     document.addEventListener('keydown', (e) => {
