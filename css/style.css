@@ -780,7 +780,18 @@ body {
     min-width: 55px;
     padding: 10px;
   }
-  .countdown-number {
+    .countdown-number {
     font-size: 1.3rem;
+  }
+}
+
+/* Fix for Flower Animation on Mobile */
+@media screen and (max-width: 600px) {
+  .flowers {
+    transform: scale(0.6) !important;
+    bottom: 15vh !important;
+  }
+  .flower {
+    bottom: 5vh !important;
   }
 }
