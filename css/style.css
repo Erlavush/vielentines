@@ -275,9 +275,29 @@ body {
 }
 
 .page-2 .swipe-prompt {
-  color: #f0f0f0;
-  bottom: auto;
-  top: 4vh;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 12px 24px;
+  border-radius: 30px;
+  backdrop-filter: blur(4px);
+  /* Force positioning */
+  position: absolute;
+  bottom: 15vh;
+  top: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: max-content;
+  pointer-events: auto;
+  cursor: pointer;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.05); }
+  100% { transform: translateX(-50%) scale(1); }
 }
 
 /* ============================================================
