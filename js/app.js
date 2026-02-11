@@ -199,6 +199,13 @@ function typeNextLine() {
     // Show sticker immediately alongside the text
     showNarrationSticker(line.sticker);
 
+    // If this is the LAST line (index 5), show the prompt immediately
+    if (narrationIndex === narrationLines.length - 1) {
+        document.getElementById('swipePrompt1').classList.remove('hidden');
+    } else {
+        document.getElementById('swipePrompt1').classList.add('hidden');
+    }
+
     // Dynamic font size based on text length
     const len = line.text.length;
     if (len > 180) {

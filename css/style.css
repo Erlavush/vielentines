@@ -192,7 +192,7 @@ body {
   object-fit: contain;
 }
 
-/* ---------- SWIPE PROMPT ---------- */
+/* ---------- SWIPE PROMPT (General) ---------- */
 .swipe-prompt {
   position: absolute;
   bottom: 4vh;
@@ -207,12 +207,26 @@ body {
   transition: opacity 0.3s ease;
 }
 
+/* Page 1 Specific: Make it sit below sticker on mobile */
+.page-1 .swipe-prompt {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  animation: bounceRight 1.5s infinite;
+}
+
 .swipe-prompt:hover {
   opacity: 1;
 }
 
 .swipe-prompt.hidden {
-  display: none;
+  display: none !important; /* Force hide */
 }
 
 @keyframes bounceRight {
