@@ -820,9 +820,9 @@ body {
 }
 
 /* Fix for Flower Animation on Mobile */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .flowers {
-    transform: scale(1.2) !important; /* Force MUCH bigger */
+    transform: scale(1.5) !important; /* Force EVEN BIGGER */
     bottom: 5vh !important;
   }
   
@@ -832,15 +832,12 @@ body {
   
   /* FORCE button to very top */
   .page-2 .swipe-prompt {
-    position: fixed !important;
-    top: 10% !important;
+    top: 10vh !important;
     bottom: auto !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    z-index: 10000 !important;
-    margin: 0 !important;
-    background: rgba(0,0,0,0.7) !important; /* Darker bg for visibility */
-    width: auto !important;
-    white-space: nowrap;
+    z-index: 99999 !important;
+    white-space: nowrap !important;
+    position: fixed !important;
   }
 }
