@@ -822,10 +822,16 @@ body {
 /* Fix for Flower Animation on Mobile */
 @media screen and (max-width: 600px) {
   .flowers {
-    transform: scale(0.6) !important;
-    bottom: 15vh !important;
+    transform: scale(0.85) !important; /* Make it bigger */
+    bottom: 10vh !important;
   }
   .flower {
-    bottom: 5vh !important;
+    bottom: 0 !important;
+  }
+  /* Move button to top for Page 2 on mobile */
+  .page-2 .swipe-prompt {
+    top: 15vh !important;
+    bottom: auto !important;
+    transform: translateX(-50%) !important;
   }
 }
