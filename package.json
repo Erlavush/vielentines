@@ -1,0 +1,19 @@
+{
+  "name": "vielentines",
+  "version": "1.0.0",
+  "description": "A heartfelt Valentine's Day proposal website for Vie",
+  "scripts": {
+    "dev": "http-server . -p 8080 -o"
+  },
+  "keywords": [
+    "valentine",
+    "proposal",
+    "website",
+    "cute"
+  ],
+  "author": "Erlavush",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

@@ -13,14 +13,14 @@
       href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css" />
     <!-- Flower animation CSS -->
     <link rel="stylesheet" href="flower-animation/css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <!-- EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   </head>
   <body>
-    <!-- ==================== PAGE CONTAINER (horizontal slider) ==================== -->
+    <!-- ==================== PAGE CONTAINER (stacked fade transitions) ==================== -->
     <div class="pages-wrapper" id="pagesWrapper">
       <!-- ==================== PAGE 1: TYPEWRITER NARRATION ==================== -->
       <section class="page page-1 active" id="page1">
@@ -29,7 +29,7 @@
           <div class="narration-sticker" id="narrationSticker">
             <img src="" alt="sticker" id="narrationStickerImg" />
           </div>
-          <div class="swipe-prompt hidden" id="swipePrompt1">Swipe right →</div>
+          <div class="swipe-prompt hidden" id="swipePrompt1" onclick="navigateToPage(1)">Click here to continue</div>
         </div>
       </section>
 
@@ -333,14 +333,14 @@
               </div>
             </div>
           </div>
-          <div class="swipe-prompt hidden" id="swipePrompt2">Slide right →</div>
+          <div class="swipe-prompt hidden" id="swipePrompt2" onclick="navigateToPage(2)">Click here to continue</div>
         </div>
       </section>
 
       <!-- ==================== PAGE 3: ENVELOPE ==================== -->
       <section class="page page-3" id="page3">
         <div class="page-content envelope-page">
-          <p class="envelope-text">I have something for you... 💌</p>
+          <p class="envelope-text">I have something for you...</p>
           <div class="envelope-wrapper" id="envelopeWrapper">
             <div class="envelope" id="envelope">
               <div class="envelope-flap"></div>
@@ -453,7 +453,7 @@
             />
             <img src="GIFs/hehe.gif" alt="kiss bear" class="celebration-gif" />
           </div>
-          <div class="swipe-prompt hidden" id="swipePrompt6">Swipe right →</div>
+          <div class="swipe-prompt hidden" id="swipePrompt6" onclick="navigateToPage(10)">Click here to continue</div>
         </div>
         <!-- Confetti canvas -->
         <canvas id="confettiCanvas"></canvas>
@@ -491,7 +491,7 @@
               </div>
             </div>
           </div>
-          <p class="closing-text">Built with 💖 by earli, for vie 🐻</p>
+          <p class="closing-text">With love, Earl.</p>
         </div>
       </section>
     </div>

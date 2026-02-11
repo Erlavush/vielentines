@@ -124,16 +124,34 @@ function handleSwipe() {
 
 function navigateToPage(pageIndex) {
     if (pageIndex < 0 || pageIndex >= TOTAL_PAGES || isAnimating) return;
+    if (pageIndex === currentPage) return;
     isAnimating = true;
+
+    const pages = document.querySelectorAll('.page');
+    const oldPage = pages[currentPage];
+    const newPage = pages[pageIndex];
+
+    // Hide floating hearts on flower page (black bg), show on others
+    const heartsEl = document.getElementById('floatingHearts');
+    if (pageIndex === 1) {
+        heartsEl.style.opacity = '0';
+        heartsEl.style.transition = 'opacity 0.8s ease';
+    } else {
+        heartsEl.style.opacity = '1';
+        heartsEl.style.transition = 'opacity 0.8s ease';
+    }
+
+    // Fade out old, fade in new
+    if (oldPage) oldPage.classList.remove('active');
+    if (newPage) newPage.classList.add('active');
+
     currentPage = pageIndex;
 
-    const wrapper = document.getElementById('pagesWrapper');
-    wrapper.style.transform = `translateX(-${pageIndex * 100}vw)`;
-
+    // Wait for CSS transition to finish (0.8s)
     setTimeout(() => {
         isAnimating = false;
         onPageEnter(pageIndex);
-    }, 650);
+    }, 850);
 }
 
 function onPageEnter(pageIndex) {
@@ -171,12 +189,23 @@ function typeNextLine() {
     const line = narrationLines[narrationIndex];
     charIndex = 0;
 
-    // Clear cursor from previous line
+    // Clear previous text for fresh line
     const textEl = document.getElementById('narrationText');
+    textEl.innerHTML = '';
 
-    // Add line break if not first line
-    if (narrationIndex > 0) {
-        textEl.innerHTML += '<br><br>';
+    // Show sticker immediately alongside the text
+    showNarrationSticker(line.sticker);
+
+    // Dynamic font size based on text length
+    const len = line.text.length;
+    if (len > 180) {
+        textEl.style.fontSize = 'clamp(0.9rem, 3vw, 1.3rem)';
+    } else if (len > 120) {
+        textEl.style.fontSize = 'clamp(1rem, 3.5vw, 1.5rem)';
+    } else if (len > 70) {
+        textEl.style.fontSize = 'clamp(1.2rem, 4vw, 1.8rem)';
+    } else {
+        textEl.style.fontSize = '';
     }
 
     // Start typing
@@ -200,19 +229,17 @@ function typeChar(line) {
         textEl.appendChild(cursor);
 
         charIndex++;
-        narrationTimer = setTimeout(() => typeChar(line), 40);
+        narrationTimer = setTimeout(() => typeChar(line), 80);
     } else {
-        // Line done — remove cursor, show sticker
+        // Line done — remove cursor
         const oldCursor = textEl.querySelector('.cursor');
         if (oldCursor) oldCursor.remove();
 
-        showNarrationSticker(line.sticker);
-
-        // After sticker shows, move to next line
+        // After pause, move to next line
         narrationIndex++;
         setTimeout(() => {
             typeNextLine();
-        }, 2000);
+        }, 2500);
     }
 }
 
@@ -221,13 +248,6 @@ function showNarrationSticker(src) {
     const stickerImg = document.getElementById('narrationStickerImg');
     stickerImg.src = src;
     stickerContainer.classList.add('visible');
-
-    // Hide sticker after a delay so next one can appear
-    setTimeout(() => {
-        if (narrationIndex < narrationLines.length) {
-            stickerContainer.classList.remove('visible');
-        }
-    }, 1800);
 }
 
 // ==================== PAGE 2: FLOWER ANIMATION ====================
