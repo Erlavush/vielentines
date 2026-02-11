@@ -474,8 +474,6 @@ function launchConfetti() {
 
 // ==================== EMAIL ====================
 function sendEmails() {
-    console.log('>>> Email sending temporarily disabled for testing.');
-    return; // DISABLED FOR TESTING
     if (emailSent) return;
     emailSent = true;
 
