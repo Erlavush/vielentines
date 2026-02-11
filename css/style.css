@@ -822,16 +822,25 @@ body {
 /* Fix for Flower Animation on Mobile */
 @media screen and (max-width: 600px) {
   .flowers {
-    transform: scale(0.85) !important; /* Make it bigger */
-    bottom: 10vh !important;
+    transform: scale(1.2) !important; /* Force MUCH bigger */
+    bottom: 5vh !important;
   }
+  
   .flower {
     bottom: 0 !important;
   }
-  /* Move button to top for Page 2 on mobile */
+  
+  /* FORCE button to very top */
   .page-2 .swipe-prompt {
-    top: 15vh !important;
+    position: fixed !important;
+    top: 10% !important;
     bottom: auto !important;
+    left: 50% !important;
     transform: translateX(-50%) !important;
+    z-index: 10000 !important;
+    margin: 0 !important;
+    background: rgba(0,0,0,0.7) !important; /* Darker bg for visibility */
+    width: auto !important;
+    white-space: nowrap;
   }
 }
